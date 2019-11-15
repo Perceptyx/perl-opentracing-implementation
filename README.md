@@ -1,4 +1,4 @@
-# # OpenTracing::Implementation
+# OpenTracing::Implementation
 
 Bootstrap the Implementation for OpenTracing
 
