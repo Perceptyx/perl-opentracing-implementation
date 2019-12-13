@@ -3,6 +3,9 @@ package OpenTracing::Implementation;
 use strict;
 use warnings;
 
+
+our $VERSION = '0.01';
+
 =head1 NAME
 
 OpenTracing::Implementation - Use OpenTracing with a specific implementation
