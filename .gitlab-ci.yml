@@ -43,7 +43,7 @@ test:unit:
       && sed '/OpenTracing::Interface/d' cpanfile.bak > cpanfile
       && rm cpanfile.bak
       
-    - curl --location --output artifacts.zip 'https://git.perceptyx.com/api/v4/projects/320/jobs/artifacts/master/download?job=package'
+    - curl --location --output artifacts.zip 'https://git.perceptyx.com/api/v4/projects/322/jobs/artifacts/master/download?job=package'
       && unzip artifacts.zip
       && rm artifacts.zip
       && cpanm --verbose --installdeps *.tar.gz
