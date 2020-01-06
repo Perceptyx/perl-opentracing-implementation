@@ -1,15 +1,5 @@
 image: ubuntu:bionic
 
-# variables:
-#   DEPENDENCIES:
-#   - package: 'OpenTracing::Interface'
-#     project: '311'
-#   - package: 'OpenTracing::GlobalTracer'
-#     project: '322'
-#
-# XXX Sadly, Gitlab-CI does not allow hashes, only straight key/value pairs.
-#     Just keep this list as a reference.
-
 stages:
   - test
   - build
@@ -34,26 +24,6 @@ before_script:
 test:unit:
   stage: test
   script:
-    - curl --location --output artifacts.zip 'https://git.perceptyx.com/api/v4/projects/331/jobs/artifacts/master/download?job=package'
-      && unzip artifacts.zip
-      && rm artifacts.zip
-      && cpanm --verbose --installdeps *.tar.gz
-      && cpanm --verbose *.tar.gz
-      && rm *.tar.gz
-    - mv cpanfile cpanfile.bak
-      && sed '/OpenTracing::Interface/d' cpanfile.bak > cpanfile
-      && rm cpanfile.bak
-      
-    - curl --location --output artifacts.zip 'https://git.perceptyx.com/api/v4/projects/322/jobs/artifacts/master/download?job=package'
-      && unzip artifacts.zip
-      && rm artifacts.zip
-      && cpanm --verbose --installdeps *.tar.gz
-      && cpanm --verbose *.tar.gz
-      && rm *.tar.gz
-    - mv cpanfile cpanfile.bak
-      && sed '/OpenTracing::GlobalTracer/d' cpanfile.bak > cpanfile
-      && rm cpanfile.bak
-      
     - cpanm --installdeps .
     - OPENTRACING_INTERFACE=1 prove -MDevel::Cover -l lib -r t/
   coverage: /Totals+.+s(d+.d+?)$/
