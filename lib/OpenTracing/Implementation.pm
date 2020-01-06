@@ -26,7 +26,7 @@ Or if you like
 
 use Carp;
 
-use OpenTracing::GlobalTracer qw/$TRACER/;
+use OpenTracing::GlobalTracer;
 
 
 use Module::Load;
@@ -55,9 +55,11 @@ sub set {
     
     load $implementation_class;
     
-    $TRACER = $implementation_class->bootstrap( @implementation_args);
+    my $tracer = $implementation_class->bootstrap( @implementation_args);
     
-    return $TRACER
+    OpenTracing::GlobalTracer->set_global_tracer( $tracer );
+    
+    return OpenTracing::GlobalTracer->get_global_tracer
 }
 
 
