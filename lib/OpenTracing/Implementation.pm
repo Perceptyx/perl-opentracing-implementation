@@ -17,8 +17,15 @@ OpenTracing::Implementation - Use OpenTracing with a specific implementation
 Or if you like
 
     use OpenTracing::Implementation;
-    
-    
+
+And one can always do a manual bootstrap
+
+    OpenTracing::Implementation->bootstrap_global_tracer( '+My::Implementation',
+        option_one => 'foo',
+        option_two => 'bar',
+    );
+
+
 
 =cut
 
@@ -26,7 +33,7 @@ Or if you like
 
 use Carp;
 
-use OpenTracing::GlobalTracer qw/$TRACER/;
+use OpenTracing::GlobalTracer;
 
 
 use Module::Load;
@@ -37,12 +44,14 @@ sub import {
         or return;
     my @implementation_args = @_;
     
-    __PACKAGE__->set( $implementation_name, @implementation_args )
+    __PACKAGE__->bootstrap_global_tracer(
+        $implementation_name => @implementation_args
+    )
 }
 
 
 
-sub set {
+sub bootstrap_global_tracer {
     my $package = shift;
     my $implementation_name = shift;
     my @implementation_args = @_;
@@ -55,9 +64,11 @@ sub set {
     
     load $implementation_class;
     
-    $TRACER = $implementation_class->bootstrap( @implementation_args);
+    my $tracer = $implementation_class->bootstrap( @implementation_args);
     
-    return $TRACER
+    OpenTracing::GlobalTracer->set_global_tracer( $tracer );
+    
+    return OpenTracing::GlobalTracer->get_global_tracer
 }
 
 
