@@ -37,12 +37,14 @@ sub import {
         or return;
     my @implementation_args = @_;
     
-    __PACKAGE__->set( $implementation_name, @implementation_args )
+    __PACKAGE__->bootstrap_global_tracer(
+        $implementation_name => @implementation_args
+    )
 }
 
 
 
-sub set {
+sub bootstrap_global_tracer {
     my $package = shift;
     my $implementation_name = shift;
     my @implementation_args = @_;
