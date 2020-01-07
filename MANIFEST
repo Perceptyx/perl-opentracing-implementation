@@ -1,3 +1,4 @@
+cpanfile
 lib/OpenTracing/Implementation.pm
 Makefile.PL
 MANIFEST
