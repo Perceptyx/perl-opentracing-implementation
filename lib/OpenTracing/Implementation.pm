@@ -17,8 +17,16 @@ OpenTracing::Implementation - Use OpenTracing with a specific implementation
 Or if you like
 
     use OpenTracing::Implementation;
-    
-    
+
+And one can always do a manual bootstrap
+
+    OpenTracing::Implementation->bootstrap_global_tracer(
+        '+My::Buisiness::OpenTracing::Implementation',
+        option_one => 'foo',
+        option_two => 'bar',
+    );
+
+
 
 =cut
 
