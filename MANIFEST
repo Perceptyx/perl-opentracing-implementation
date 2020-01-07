@@ -1,5 +1,7 @@
 cpanfile
 lib/OpenTracing/Implementation.pm
+lib/OpenTracing/Implementation/Interface/Bootstrap.pm
+lib/OpenTracing/Implementation/Interface/Bootstrap.pod
 Makefile.PL
 MANIFEST
 README.md
