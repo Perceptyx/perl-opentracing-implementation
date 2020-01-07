@@ -20,8 +20,7 @@ Or if you like
 
 And one can always do a manual bootstrap
 
-    OpenTracing::Implementation->bootstrap_global_tracer(
-        '+My::Buisiness::OpenTracing::Implementation',
+    OpenTracing::Implementation->bootstrap_global_tracer( '+My::Implementation',
         option_one => 'foo',
         option_two => 'bar',
     );
