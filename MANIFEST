@@ -6,4 +6,5 @@ Makefile.PL
 MANIFEST
 README.md
 t/00_use_ok.t
+t/01_can_method.t
 t/Interface/Bootstrap/00_use_ok.t
