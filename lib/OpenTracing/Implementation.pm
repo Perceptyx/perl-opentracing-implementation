@@ -10,6 +10,8 @@ our $VERSION = '0.03';
 
 OpenTracing::Implementation - Use OpenTracing with a specific implementation
 
+
+
 =head1 SYNOPSIS
 
     use OpenTracing::Implementation 'YourBackend', option_one => 'foo';
@@ -35,6 +37,13 @@ Alternativly, when you like to rely on environment variables
     
     Op[enTracing::GlobalTracer->set_global_tracer( $tracer );
 
+
+
+=head1 DESCRIPTION
+
+This module provides an easy way to bootstrap a specific
+C<OpenTracing::Implementation> compliant tracer and have it globally available.
+
 =cut
 
 
@@ -56,9 +65,72 @@ sub import {
 
 
 
+=head1 CLASS METHODS
+
+=cut
+
+
+
+=head2 C<bootstrap_tracer>
+
+Bootstraps a given tracer implementation with various options for that tracer.
+
+=over
+
+=item Required Positional Paramaters
+
+=over
+
+=item implementation_name
+
+Must be a C<Str> type. It will look for the implementation inside the
+C<OpenTracing::Implementation> namespace, so it is easy to specify any of the
+exisitng ones like C<NoOp>, C<Test>, and C<DataDog>.
+
+=back
+
+=item Optional Parameters
+
+Any parameters required to bootstrap the given implementation according to their
+specifications and documentation.
+
+=item Retruns
+
+=over
+
+=item The build Tracer object
+
+=back
+
+=back
+
+=cut
+
 sub bootstrap_tracer         { shift->_build_tracer( @_ ) }
 
+
+
+=head2 C<bootstrap_default_tracer>
+
+Same as C<bootstrap_tracer>, except that it will use whatever is specified in
+the C<OPENTRACING_IMPLEMENTATION> environment variable, Or C<NoOp> if not set.
+This is added for convenience for deployment so one can turn it on or off per
+environment.
+
+Do not pass in the name as first argument.
+
+=cut
+
 sub bootstrap_default_tracer { shift->_build_tracer( undef, @_ ) }
+
+
+
+=head2 C<bootstrap_global_tracer>
+
+Same as C<bootstrap_tracer>, but additionally sets the 'singleton' inside
+L<OpenTracing::GlabalTracer>.
+
+=cut
 
 sub bootstrap_global_tracer {
     my $package = shift;
