@@ -80,6 +80,9 @@ sub _get_implementation_class {
     my $class = shift;
     my $implementation_name = shift;
     
+    $implementation_name = $ENV{OPENTRACING_IMPLEMENTATION} || 'NoOp'
+        unless defined $implementation_name;
+
     my $implementation_class = substr( $implementation_name, 0, 1) eq '+' ?
         substr( $implementation_name, 1 )
         :
