@@ -30,7 +30,14 @@ Alternativly, when you like to rely on environment variables
     );
     # but maybe not all options make sense to every tracer, be warned
     
-    Op[enTracing::GlobalTracer->set_global_tracer( $tracer );
+    OpenTracing::GlobalTracer->set_global_tracer( $tracer );
+
+Or if you just want a bootastrapped tracer:
+
+    my $tracer = OpenTracing::Implementation->bootstrap_tracer( 'ProviderFoo'
+        option_one => 'foo',
+        option_two => 'bar',
+    );
 
 
 
@@ -61,6 +68,9 @@ Must be a C<Str> type. It will look for the implementation inside the
 C<OpenTracing::Implementation> namespace, so it is easy to specify any of the
 exisitng ones like C<NoOp>, C<Test>, and C<DataDog>.
 
+If a tracer lives outside that namespace, it would need to be prepended with a
+C<+>, like in C<+My::Iplementation>.
+
 =back
 
 =item Optional Parameters
@@ -84,8 +94,6 @@ specifications and documentation.
 
 Same as C<bootstrap_tracer>, except that it will use whatever is specified in
 the C<OPENTRACING_IMPLEMENTATION> environment variable, Or C<NoOp> if not set.
-This is added for convenience for deployment so one can turn it on or off per
-environment.
 
 Do not pass in the name as first argument.
 
@@ -97,6 +105,14 @@ Same as C<bootstrap_tracer>, but additionally sets the 'singleton' inside
 L<OpenTracing::GlabalTracer>.
 
 
+
+=head1 ENVIRONMENT VARIABLES
+
+
+
+=head2 C<OPENTRACING_IMPLEMENTATION>
+
+Will be used when calling C<bootstrap_default_tracer>.
 
 =head1 AUTHOR
 
