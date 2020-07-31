@@ -3,7 +3,7 @@ package OpenTracing::Implementation;
 use strict;
 use warnings;
 
-our $VERSION = '0.03';
+our $VERSION = 'v0.31.0';
 
 use OpenTracing::GlobalTracer;
 

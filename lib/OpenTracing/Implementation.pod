@@ -5,7 +5,7 @@ OpenTracing::Implementation - Use OpenTracing with a specific implementation
 
 =head1 VERSION
 
-'0.03'
+'v0.31.0'
 
 =head1 SYNOPSIS
 
