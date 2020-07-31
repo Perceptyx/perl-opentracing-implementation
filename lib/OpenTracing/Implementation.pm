@@ -12,20 +12,28 @@ OpenTracing::Implementation - Use OpenTracing with a specific implementation
 
 =head1 SYNOPSIS
 
-    use OpenTracing::Implementation qw/YourBackend/;
+    use OpenTracing::Implementation 'YourBackend', option_one => 'foo';
 
 Or if you like
 
     use OpenTracing::Implementation;
 
-And one can always do a manual bootstrap
+And one can then do a manual bootstrap
 
     OpenTracing::Implementation->bootstrap_global_tracer( '+My::Implementation',
         option_one => 'foo',
         option_two => 'bar',
     );
 
+Alternativly, when you like to rely on environment variables
 
+    my $tracer = OpenTracing::Implementation->bootstrap_default_tracer(
+        option_one => 'foo',
+        option_two => 'bar',
+    );
+    # but maybe not all options make sense to every tracer, be warned
+    
+    Op[enTracing::GlobalTracer->set_global_tracer( $tracer );
 
 =cut
 
