@@ -40,13 +40,9 @@ use Module::Load;
 
 sub import {
     my $package = shift;
-    my $implementation_name = shift || $ENV{OPENTRACING_IMPLEMENTATION}
-        or return;
-    my @implementation_args = @_;
-    
-    __PACKAGE__->bootstrap_global_tracer(
-        $implementation_name => @implementation_args
-    )
+    return unless @_;
+     
+    __PACKAGE__->bootstrap_global_tracer( @_ )
 }
 
 
