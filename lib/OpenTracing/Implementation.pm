@@ -29,7 +29,7 @@ And one can always do a manual bootstrap
 
 =cut
 
-#use lib qw(/Users/tvanhoesel/Repositories/Perceptyx/perl-opentracing-implementation-datadog/lib);
+
 
 use Carp;
 
@@ -104,5 +104,6 @@ provided "as is" and without any express or implied warranties.
 For details, see the full text of the license in the file LICENSE.
 
 
+=cut
 
 1;
