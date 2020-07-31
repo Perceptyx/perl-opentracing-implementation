@@ -48,6 +48,21 @@ sub import {
 
 
 
+sub bootstrap_tracer         { shift->_build_tracer( @_ ) }
+
+sub bootstrap_default_tracer { shift->_build_tracer( undef, @_ ) }
+
+sub bootstrap_global_tracer {
+    my $package = shift;
+    my $tracer = $package->_build_tracer( @_ );
+    
+    OpenTracing::GlobalTracer->set_global_tracer( $tracer );
+    
+    return OpenTracing::GlobalTracer->get_global_tracer
+}
+
+
+
 # _build_tracer
 #
 # passing undef as implementation name will cause to use the $ENV
