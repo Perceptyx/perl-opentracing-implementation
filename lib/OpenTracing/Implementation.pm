@@ -32,6 +32,7 @@ And one can always do a manual bootstrap
 
 
 use Carp;
+our @CARP_NOT;
 
 use OpenTracing::GlobalTracer;
 
@@ -47,7 +48,11 @@ sub import {
 
 
 
-sub bootstrap_global_tracer {
+# _build_tracer
+#
+# passing undef as implementation name will cause to use the $ENV
+#
+sub _build_tracer {
     my $package = shift;
     my $implementation_name = shift;
     my @implementation_args = @_;
@@ -60,11 +65,13 @@ sub bootstrap_global_tracer {
     
     load $implementation_class;
     
+    eval { load $implementation_class };
+    croak "GlobalTracer can't load implementation [$implementation_class]"
+        if $@;
+    
     my $tracer = $implementation_class->bootstrap_tracer( @implementation_args);
     
-    OpenTracing::GlobalTracer->set_global_tracer( $tracer );
-    
-    return OpenTracing::GlobalTracer->get_global_tracer
+    return $tracer
 }
 
 
