@@ -25,7 +25,7 @@ test:unit:
   stage: test
   script:
     - cpanm --installdeps .
-    - OPENTRACING_INTERFACE=1 prove -MDevel::Cover -l lib -r t/
+    - EXTENDED_TESTING=1 prove -MDevel::Cover -l lib -r t/
   coverage: /Totals+.+s(d+.d+?)$/
 
 package:
