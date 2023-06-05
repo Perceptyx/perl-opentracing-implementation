@@ -24,11 +24,12 @@ sub bootstrap_tracer         { shift->_build_tracer( @_ ) }
 sub bootstrap_default_tracer { shift->_build_tracer( undef, @_ ) }
 
 sub bootstrap_global_tracer {
-    my $package = shift;
-    my $tracer = $package->_build_tracer( @_ );
-    
-    OpenTracing::GlobalTracer->set_global_tracer( $tracer );
-    
+    OpenTracing::GlobalTracer->set_global_tracer( shift->_build_tracer( @_ ) );
+    return OpenTracing::GlobalTracer->get_global_tracer
+}
+
+sub bootstrap_global_default_tracer {
+    OpenTracing::GlobalTracer->set_global_tracer( shift->_build_tracer( undef, @_ ) );
     return OpenTracing::GlobalTracer->get_global_tracer
 }
 

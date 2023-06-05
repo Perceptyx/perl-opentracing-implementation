@@ -2,13 +2,12 @@ use Test::Most;
 
 use OpenTracing::Implementation;
 
-local $ENV{OPENTRACING_IMPLEMENTATION} = '+MyTest::Default';
-
 # _build_tracer will try to `load` these from disk
 #
 use Module::Loaded;
 mark_as_loaded( MyTest::Implementation );
 mark_as_loaded( MyTest::Default );
+mark_as_loaded( OpenTracing::Implementation::NoOp );
 
 
 
@@ -41,6 +40,8 @@ subtest "pass on arguments for 'bootstrap_tracer'" => sub {
 subtest "pass on arguments for 'bootstrap_default_tracer'" => sub {
     
     undef @test_params;
+    
+    local $ENV{OPENTRACING_IMPLEMENTATION} = '+MyTest::Default';
     
     lives_ok {
         my $tracer = OpenTracing::Implementation->bootstrap_default_tracer(
@@ -81,6 +82,52 @@ subtest "pass on arguments for 'bootstrap_global_tracer'" => sub {
 
 
 
+subtest "pass on arguments for 'bootstrap_global_default_tracer'" => sub {
+    
+    undef @test_params;
+    
+    local $ENV{OPENTRACING_IMPLEMENTATION} = '+MyTest::Default';
+    
+    lives_ok {
+        my $tracer = OpenTracing::Implementation->bootstrap_global_default_tracer(
+            qux => 4,
+            qw/and much more/
+        )
+    } "Can call method 'bootstrap_global_default_tracer'";
+    
+    cmp_deeply(
+        \@test_params => [
+            [ 'MyTest::Default', 'qux', 4, 'and', 'much', 'more' ]
+        ], "... and passes on the right params to 'MyTest::Default"
+    );
+    
+};
+
+
+
+subtest "pass on arguments for 'NoOp'" => sub {
+    
+    undef @test_params;
+    
+    local $ENV{OPENTRACING_IMPLEMENTATION} = undef;
+    
+    lives_ok {
+        my $tracer = OpenTracing::Implementation->bootstrap_default_tracer(
+            tix => 5,
+            qw/nothing/
+        )
+    } "Can call method 'bootstrap_global_tracer'";
+    
+    cmp_deeply(
+        \@test_params => [
+            [ 'OpenTracing::Implementation::NoOp', 'tix', 5, 'nothing' ]
+        ], "... and passes on the right params to 'NoOp"
+    );
+    
+};
+
+
+
 done_testing();
 
 
@@ -101,6 +148,21 @@ BEGIN {
 
 
 package MyTest::Default;
+
+sub bootstrap_tracer {
+    push @main::test_params, [ @_ ];
+    
+    bless {}, 'MyStub::Tracer'
+}
+
+BEGIN {
+    use Role::Tiny::With;
+    with 'OpenTracing::Implementation::Interface::Bootstrap'
+} # check at compile time, perl -c will work
+
+
+
+package OpenTracing::Implementation::NoOp;
 
 sub bootstrap_tracer {
     push @main::test_params, [ @_ ];
