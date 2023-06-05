@@ -81,6 +81,27 @@ subtest "pass on arguments for 'bootstrap_global_tracer'" => sub {
 
 
 
+subtest "pass on arguments for 'bootstrap_global_default_tracer'" => sub {
+    
+    undef @test_params;
+    
+    lives_ok {
+        my $tracer = OpenTracing::Implementation->bootstrap_global_default_tracer(
+            qux => 4,
+            qw/and much more/
+        )
+    } "Can call method 'bootstrap_global_default_tracer'";
+    
+    cmp_deeply(
+        \@test_params => [
+            [ 'MyTest::Default', 'qux', 4, 'and', 'much', 'more' ]
+        ], "... and passes on the right params to 'MyTest::Default"
+    );
+    
+};
+
+
+
 done_testing();
 
 
