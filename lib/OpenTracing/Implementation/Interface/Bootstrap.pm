@@ -1,13 +1,12 @@
 package OpenTracing::Implementation::Interface::Bootstrap;
 
 use Role::Declare::Should;
-use Types::Standard qw/Any ConsumerOf Maybe Str/;
+use Types::Standard qw/Any ConsumerOf/;
 
 
 
 class_method bootstrap_tracer(
-    Str $implementation_name,
-    Maybe [ Any ] @implementation_args,
+    Any @implementation_args,
 ) :Return ( ConsumerOf['OpenTracing::Interface::Tracer'] ) { }
 
 

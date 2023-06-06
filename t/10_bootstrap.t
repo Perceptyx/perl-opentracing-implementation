@@ -37,6 +37,27 @@ subtest "pass on arguments for 'bootstrap_tracer'" => sub {
 
 
 
+subtest "pass NO arguments for 'bootstrap_default_tracer'" => sub {
+    
+    undef @test_params;
+    
+    local $ENV{OPENTRACING_IMPLEMENTATION} = '+MyTest::Default';
+    
+    lives_ok {
+        my $tracer = OpenTracing::Implementation->bootstrap_default_tracer(
+        )
+    } "Can call method 'bootstrap_default_tracer'";
+    
+    cmp_deeply(
+        \@test_params => [
+            [ 'MyTest::Default' ]
+        ], "... and passes on the right params to 'MyTest::Default', NONE!"
+    );
+    
+};
+
+
+
 subtest "pass on arguments for 'bootstrap_default_tracer'" => sub {
     
     undef @test_params;
