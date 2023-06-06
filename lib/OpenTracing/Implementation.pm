@@ -18,6 +18,8 @@ sub OT_DEBUG {
         $ENV{ PERL_OPENTRACING_DEBUG } :
     exists $ENV{ OPENTRACING_DEBUG } ?
         $ENV{ OPENTRACING_DEBUG } :
+    exists $ENV{ DEBUG } ?
+        $ENV{ DEBUG } :
     undef
 }
 #
