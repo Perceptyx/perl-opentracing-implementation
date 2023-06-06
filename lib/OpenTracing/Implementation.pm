@@ -5,6 +5,26 @@ use warnings;
 
 our $VERSION = 'v0.32.0';
 
+sub OT_IMPLEMENTATION_NAME {
+    exists $ENV{ PERL_OPENTRACING_IMPLEMENTATION } ?
+        $ENV{ PERL_OPENTRACING_IMPLEMENTATION } :
+    exists $ENV{ OPENTRACING_IMPLEMENTATION } ?
+        $ENV{ OPENTRACING_IMPLEMENTATION } :
+    'NoOp'
+}
+
+sub OT_DEBUG {
+    exists $ENV{ PERL_OPENTRACING_DEBUG } ?
+        $ENV{ PERL_OPENTRACING_DEBUG } :
+    exists $ENV{ OPENTRACING_DEBUG } ?
+        $ENV{ OPENTRACING_DEBUG } :
+    undef
+}
+#
+# it was meant to be a constant, but during test, these seem to be dynamic
+
+
+
 use OpenTracing::GlobalTracer;
 
 use Carp;
@@ -46,7 +66,7 @@ sub _build_tracer {
         __PACKAGE__->_get_implementation_class( $implementation_name );
     
     carp "Loading implementation $implementation_class"
-        if $ENV{OPENTRACING_DEBUG};
+        if OT_DEBUG;
     
     load $implementation_class;
     
@@ -61,11 +81,8 @@ sub _build_tracer {
 
 sub _get_implementation_class {
     my $class = shift;
-    my $implementation_name = shift;
+    my $implementation_name = shift // OT_IMPLEMENTATION_NAME;
     
-    $implementation_name = $ENV{OPENTRACING_IMPLEMENTATION} || 'NoOp'
-        unless defined $implementation_name;
-
     my $implementation_class = substr( $implementation_name, 0, 1) eq '+' ?
         substr( $implementation_name, 1 )
         :
