@@ -109,8 +109,6 @@ subtest "pass on arguments for 'NoOp'" => sub {
     
     undef @test_params;
     
-    local $ENV{OPENTRACING_IMPLEMENTATION} = undef;
-    
     lives_ok {
         my $tracer = OpenTracing::Implementation->bootstrap_default_tracer(
             tix => 5,
