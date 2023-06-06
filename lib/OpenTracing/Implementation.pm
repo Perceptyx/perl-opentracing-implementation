@@ -3,7 +3,7 @@ package OpenTracing::Implementation;
 use strict;
 use warnings;
 
-our $VERSION = 'v0.33.0';
+our $VERSION = 'v0.33.1';
 
 sub OT_IMPLEMENTATION_NAME {
     exists $ENV{ PERL_OPENTRACING_IMPLEMENTATION } ?
