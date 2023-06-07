@@ -1,10 +1,18 @@
 use Test::Most;
 
+BEGIN {
+    use Module::Loaded;
+    mark_as_loaded( OpenTracing::Implementation::NoOp::Tracer )
+    #
+    # underlying use OpenTracing::GlobalTracer import warns if it can not load the NoOp::Tracer
+}
+
 use OpenTracing::Implementation;
+
+use Module::Loaded;
 
 # _build_tracer will try to `load` these from disk
 #
-use Module::Loaded;
 mark_as_loaded( MyTest::Implementation );
 mark_as_loaded( MyTest::Default );
 mark_as_loaded( OpenTracing::Implementation::NoOp );
