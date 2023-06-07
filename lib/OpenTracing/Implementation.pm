@@ -70,8 +70,6 @@ sub _build_tracer {
     carp "Loading implementation $implementation_class"
         if OT_DEBUG;
     
-    load $implementation_class;
-    
     eval { load $implementation_class };
     croak "GlobalTracer can't load implementation [$implementation_class]"
         if $@;
